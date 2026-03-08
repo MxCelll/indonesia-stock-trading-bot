@@ -17,7 +17,7 @@ Ditenagai oleh XGBoost, LightGBM, LSTM, dan integrasi Telegram. Bot ini mampu me
 - **Analisis Sentimen**:  
   Google News + scraping berita lokal (Kontan, IDX Channel, CNBC, Bisnis.com) menggunakan model **IndoBERT** (Bahasa Indonesia).
 - **Data Real-time & Historis**:  
-  Mengambil data dari Yahoo Finance untuk 650+ saham Indonesia (kode `.JK`), dengan caching dan optimasi database.
+  Mengambil data dari Yahoo Finance untuk 950+ saham Indonesia (kode `.JK`), dengan caching dan optimasi database.
 - **Manajemen Risiko**:  
   Position sizing berbasis ATR, circuit breaker, cooldown period, dan trailing stop.
 - **Bot Telegram Interaktif**:  
