@@ -1,0 +1,57 @@
+[
+  {
+    "symbol": "BBCA.JK",
+    "strategy_name": "BBCA Momentum Reversal dengan Konfirmasi Volume",
+    "parameters": "{\"name\": \"BBCA Momentum Reversal dengan Konfirmasi Volume\", \"description\": \"Strategi mencari titik oversold (RSI rendah) dengan konfirmasi momentum positif (MACD > sinyal) dan volume tinggi, keluar saat overbought atau tren melemah.\", \"entry_conditions\": [{\"indicator\": \"RSI\", \"operator\": \"<\", \"value\": 38}, {\"indicator\": \"MACD_diff\", \"operator\": \">\", \"value\": 0}, {\"indicator\": \"Volume\", \"operator\": \">\", \"value\": \"Volume_MA20\"}], \"exit_conditions\": [{\"indicator\": \"RSI\", \"operator\": \">\", \"value\": 62}, {\"indicator\": \"MACD_diff\", \"operator\": \"<\", \"value\": 0}], \"stop_loss_pct\": 4.0, \"take_profit_pct\": 8.0}",
+    "total_return": 0.017500000000003624,
+    "win_rate": 100.0,
+    "profit_factor": Infinity,
+    "max_drawdown": 0.0,
+    "sharpe": 0.0,
+    "num_trades": 1
+  },
+  {
+    "symbol": "BBCA.JK",
+    "strategy_name": "BBCA Momentum Reversal dengan Konfirmasi Volume",
+    "parameters": "{\"name\": \"BBCA Momentum Reversal dengan Konfirmasi Volume\", \"description\": \"Strategi mencari titik oversold (RSI rendah) dengan konfirmasi momentum positif (MACD > sinyal) dan volume tinggi, keluar saat overbought atau tren melemah.\", \"entry_conditions\": [{\"indicator\": \"RSI\", \"operator\": \"<\", \"value\": 38}, {\"indicator\": \"MACD_diff\", \"operator\": \">\", \"value\": 0}, {\"indicator\": \"Volume\", \"operator\": \">\", \"value\": \"Volume_MA20\"}], \"exit_conditions\": [{\"indicator\": \"RSI\", \"operator\": \">\", \"value\": 62}, {\"indicator\": \"Close\", \"operator\": \"<\", \"value\": \"EMA20\"}], \"stop_loss_pct\": 4.5, \"take_profit_pct\": 9.0}",
+    "total_return": 0.017500000000003624,
+    "win_rate": 100.0,
+    "profit_factor": Infinity,
+    "max_drawdown": 0.0,
+    "sharpe": 0.0,
+    "num_trades": 1
+  },
+  {
+    "symbol": "BBCA.JK",
+    "strategy_name": "BBCA Momentum Reversal dengan Konfirmasi Volume",
+    "parameters": "{\"name\": \"BBCA Momentum Reversal dengan Konfirmasi Volume\", \"description\": \"Strategi mencari titik oversold (RSI rendah) dengan konfirmasi momentum positif (MACD > sinyal) dan volume tinggi, keluar saat overbought atau tren melemah.\", \"entry_conditions\": [{\"indicator\": \"RSI\", \"operator\": \"<\", \"value\": 38}, {\"indicator\": \"MACD_diff\", \"operator\": \">\", \"value\": 0}, {\"indicator\": \"Volume\", \"operator\": \">\", \"value\": \"Volume_MA20\"}], \"exit_conditions\": [{\"indicator\": \"RSI\", \"operator\": \">\", \"value\": 62}, {\"indicator\": \"Close\", \"operator\": \"<\", \"value\": \"EMA20\"}], \"stop_loss_pct\": 4.0, \"take_profit_pct\": 8.0}",
+    "total_return": 0.017500000000003624,
+    "win_rate": 100.0,
+    "profit_factor": Infinity,
+    "max_drawdown": 0.0,
+    "sharpe": 0.0,
+    "num_trades": 1
+  },
+  {
+    "symbol": "BBCA.JK",
+    "strategy_name": "BBCA Momentum Reversal dengan Konfirmasi Volume",
+    "parameters": "{\"name\": \"BBCA Momentum Reversal dengan Konfirmasi Volume\", \"description\": \"Strategi mencari titik oversold (RSI rendah) dengan konfirmasi momentum positif (MACD > sinyal) dan volume tinggi, keluar saat overbought atau tren melemah.\", \"entry_conditions\": [{\"indicator\": \"RSI\", \"operator\": \"<\", \"value\": 38}, {\"indicator\": \"MACD_diff\", \"operator\": \">\", \"value\": 0}, {\"indicator\": \"Volume\", \"operator\": \">\", \"value\": \"Volume_MA20\"}], \"exit_conditions\": [{\"indicator\": \"RSI\", \"operator\": \">\", \"value\": 62}, {\"indicator\": \"Close\", \"operator\": \"<\", \"value\": \"EMA20\"}], \"stop_loss_pct\": 4.5, \"take_profit_pct\": 8.0}",
+    "total_return": 0.017500000000003624,
+    "win_rate": 100.0,
+    "profit_factor": Infinity,
+    "max_drawdown": 0.0,
+    "sharpe": 0.0,
+    "num_trades": 1
+  },
+  {
+    "symbol": "BBCA.JK",
+    "strategy_name": "BBCA Momentum Reversal dengan Konfirmasi Volume",
+    "parameters": "{\"name\": \"BBCA Momentum Reversal dengan Konfirmasi Volume\", \"description\": \"Strategi mencari titik oversold (RSI rendah) dengan konfirmasi momentum positif (MACD > sinyal) dan volume tinggi, keluar saat overbought atau tren melemah.\", \"entry_conditions\": [{\"indicator\": \"RSI\", \"operator\": \"<\", \"value\": 38}, {\"indicator\": \"MACD\", \"operator\": \">\", \"value\": \"MACD_signal\"}, {\"indicator\": \"Volume\", \"operator\": \">\", \"value\": \"Volume_MA20\"}], \"exit_conditions\": [{\"indicator\": \"RSI\", \"operator\": \">\", \"value\": 62}, {\"indicator\": \"Close\", \"operator\": \"<\", \"value\": \"EMA20\"}], \"stop_loss_pct\": 4.5, \"take_profit_pct\": 9.0}",
+    "total_return": -0.004999999999999449,
+    "win_rate": 0.0,
+    "profit_factor": 0.0,
+    "max_drawdown": 0.0,
+    "sharpe": 0.0,
+    "num_trades": 1
+  }
+]

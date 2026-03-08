@@ -1,0 +1,93 @@
+# scripts/ml_features.py (tambahan)
+import pandas as pd
+import numpy as np
+import sqlite3
+from scripts.data_utils import ambil_data_dari_db, tambah_indikator
+
+def get_cluster_sentiment_for_symbol(symbol, db_path='data/saham.db'):
+    """Mengambil sentimen klaster terbaru untuk suatu saham"""
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    cursor.execute('''
+        SELECT avg_sentiment FROM cluster_sentiments
+        WHERE symbols LIKE ?
+        ORDER BY updated_at DESC LIMIT 1
+    ''', (f'%{symbol}%',))
+    row = cursor.fetchone()
+    conn.close()
+    return row[0] if row else 0.0
+
+def get_economic_features(db_path='data/saham.db'):
+    """Mengambil data ekonomi terbaru dari FRED sebagai fitur"""
+    conn = sqlite3.connect(db_path)
+    df = pd.read_sql("SELECT * FROM economic_data ORDER BY date DESC LIMIT 1", conn)
+    conn.close()
+    if df.empty:
+        return {}
+    features = {
+        'fed_rate': df['actual'].iloc[0] if 'FEDFUNDS' in df['series_id'].values else 0,
+        'cpi': df['actual'].iloc[0] if 'CPIAUCSL' in df['series_id'].values else 0,
+        'unemployment': df['actual'].iloc[0] if 'UNRATE' in df['series_id'].values else 0,
+    }
+    return features
+
+def create_features_enhanced(symbol, lookback=30, target_days=5):
+    """
+    Membuat fitur dengan tambahan sentimen klaster dan data ekonomi.
+    """
+    df = ambil_data_dari_db(symbol, hari=1000)
+    if df is None or len(df) < 500:
+        raise ValueError(f"Data tidak cukup untuk {symbol}")
+    
+    df = tambah_indikator(df)
+    df = df.sort_values('Date').reset_index(drop=True)
+    
+    # Target
+    future_price = df['Close'].shift(-target_days)
+    df['target_direction'] = (future_price > df['Close']).astype(int)
+    df = df.dropna(subset=['target_direction'])
+    
+    # Fitur dasar (lag returns)
+    feature_cols = []
+    for lag in range(1, lookback+1):
+        df[f'return_{lag}'] = df['Close'].pct_change(lag)
+        feature_cols.append(f'return_{lag}')
+    
+    # Indikator teknikal
+    tek_indikators = ['RSI', 'MACD', 'MACD_signal', 'EMA20', 'EMA50', 'ATR', 'ADX', 'DI_plus', 'DI_minus', 'Volume_MA20']
+    for ind in tek_indikators:
+        if ind in df.columns:
+            feature_cols.append(ind)
+    
+    # Rolling volatility
+    for window in [5, 10, 20]:
+        df[f'volatility_{window}'] = df['Close'].pct_change().rolling(window).std()
+        feature_cols.append(f'volatility_{window}')
+    
+    # Momentum
+    for period in [5, 10, 20]:
+        df[f'momentum_{period}'] = df['Close'] / df['Close'].shift(period) - 1
+        feature_cols.append(f'momentum_{period}')
+    
+    # Volume ratio
+    df['volume_ratio'] = df['Volume'] / df['Volume_MA20']
+    feature_cols.append('volume_ratio')
+    
+    # Sentimen klaster (ambil per baris, tapi sentimen tidak berubah harian, jadi diulang)
+    cluster_sent = get_cluster_sentiment_for_symbol(symbol)
+    df['cluster_sentiment'] = cluster_sent
+    feature_cols.append('cluster_sentiment')
+    
+    # Data ekonomi (fitur statis, diulang)
+    econ_features = get_economic_features()
+    for key, value in econ_features.items():
+        df[key] = value
+        feature_cols.append(key)
+    
+    # Hapus baris dengan NaN
+    df = df.dropna()
+    
+    X = df[feature_cols].values
+    y = df['target_direction'].values
+    
+    return X, y, feature_cols, df.index

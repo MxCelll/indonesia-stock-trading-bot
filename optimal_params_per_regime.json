@@ -1,0 +1,44 @@
+{
+  "BBCA.JK": {
+    "trend_swing": {
+      "sideways": {
+        "rsi_oversold": 30,
+        "rsi_overbought": 70,
+        "adx_threshold": 20,
+        "use_ema_filter": true
+      },
+      "high_volatility": {
+        "rsi_oversold": 30,
+        "rsi_overbought": 70,
+        "adx_threshold": 20,
+        "use_ema_filter": true
+      }
+    }
+  },
+  "AHAP.JK": {
+    "trend_swing": {
+      "trending_bull": {
+        "rsi_oversold": 30,
+        "rsi_overbought": 70,
+        "adx_threshold": 20,
+        "use_ema_filter": true
+      },
+      "trending_bear": {
+        "rsi_oversold": 30,
+        "rsi_overbought": 70,
+        "adx_threshold": 20,
+        "use_ema_filter": true
+      }
+    }
+  },
+  "EKAD.JK": {
+    "trend_swing": {
+      "trending_bull": {
+        "rsi_oversold": 30,
+        "rsi_overbought": 70,
+        "adx_threshold": 20,
+        "use_ema_filter": true
+      }
+    }
+  }
+}
