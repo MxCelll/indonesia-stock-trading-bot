@@ -1,182 +1,189 @@
-# 🤖 Bot Trading Saham Indonesia
+# 🤖 Indonesia Stock Trading Bot
 
-Bot Telegram untuk analisis teknikal saham Indonesia dengan dukungan AI (Gemini), fitur screener, watchlist, backtesting, dan notifikasi otomatis.
+**Multi-Agent Intelligent Trading Bot for Indonesian Stocks**  
+Ditenagai oleh XGBoost, LightGBM, LSTM, dan integrasi Telegram. Bot ini mampu menganalisis lebih dari 650 saham Indonesia, memberikan sinyal trading berbasis konsensus 8 agen, dan dapat dilatih secara otomatis.
 
-## 📋 Daftar Isi
-- [Fitur](#fitur)
-- [Persyaratan Sistem](#persyaratan-sistem)
-- [Instalasi](#instalasi)
-- [Konfigurasi](#konfigurasi)
-- [Cara Menjalankan](#cara-menjalankan)
-- [Perintah Telegram](#perintah-telegram)
-- [Struktur Proyek](#struktur-proyek)
-- [Kustomisasi](#kustomisasi)
-- [Pemecahan Masalah](#pemecahan-masalah)
-- [Lisensi & Disclaimer](#lisensi--disclaimer)
+![Dashboard Preview](assets/dashboard.png)  
+*Contoh tampilan dashboard interaktif*
 
-## 🚀 Fitur
-- **Data Saham**: Impor data historis dari Investing.com (CSV) ke database SQLite.
-- **Analisis Teknikal**: RSI, MACD, EMA (20,50,200), Bollinger Bands, ATR, ADX, Stochastic.
-- **AI Validator**: Integrasi Gemini API untuk analisis mendalam dan sentimen berita.
-- **Screener**: Filter saham berdasarkan kondisi teknikal (oversold, volume spike, golden cross, dll) dengan filter kustom.
-- **Watchlist**: Pantau saham favorit dengan target/stop, lengkap dengan data real-time.
-- **Multi-Timeframe Analysis**: Analisis tren di daily, weekly, monthly dengan skoring.
-- **Backtesting**: Simulasi trading historis dengan grafik equity curve dan metrik.
-- **Notifikasi Otomatis**: Alert setiap jam saat pasar buka untuk kondisi tertentu (support/resistance, volume spike, RSI ekstrem).
-- **Laporan Mingguan**: Grafik equity curve, statistik, dan evaluasi AI.
-- **Bot Telegram**: Semua perintah interaktif melalui Telegram.
+---
 
-## 💻 Persyaratan Sistem
-- Windows 10/11 (atau OS lain dengan Python 3.11+)
-- Python 3.11.x (disarankan)
-- Koneksi internet stabil
-- Akun Telegram (untuk bot)
-- API Key Gemini (dari [Google AI Studio](https://aistudio.google.com/apikey))
-- API Key NewsAPI (dari [newsapi.org](https://newsapi.org/)) – opsional untuk sentimen berita
+## 📌 Fitur Utama
 
-## 📥 Instalasi
+- **Multi-Agent System** dengan 8 agen khusus:  
+  `Announcement`, `Event`, `Momentum`, `Market`, `BestStrategy`, `Macro`, `StrategyAdapter`, `Geopolitical`.
+- **Model Machine Learning Canggih**:  
+  XGBoost, LightGBM, dan LSTM dengan hyperparameter tuning, ensemble, dan auto-training via antrean.
+- **Analisis Sentimen**:  
+  Google News + scraping berita lokal (Kontan, IDX Channel, CNBC, Bisnis.com) menggunakan model **IndoBERT** (Bahasa Indonesia).
+- **Data Real-time & Historis**:  
+  Mengambil data dari Yahoo Finance untuk 650+ saham Indonesia (kode `.JK`), dengan caching dan optimasi database.
+- **Manajemen Risiko**:  
+  Position sizing berbasis ATR, circuit breaker, cooldown period, dan trailing stop.
+- **Bot Telegram Interaktif**:  
+  40+ perintah untuk analisis cepat, watchlist, backtesting, jurnal trading, dan monitoring.
+- **Dashboard Visual**:  
+  Dibangun dengan Streamlit, menampilkan equity curve, performa agen, log error, dan sentimen berita secara real-time.
+- **Sistem Antrean Training**:  
+  Training model berjalan di latar belakang dengan maksimal 2 proses simultan, mencegah overload bot.
+- **Database Terindeks**:  
+  SQLite dengan indeks optimal untuk query cepat (rata-rata <0,01 detik untuk 658 ribu baris data).
 
-### 1. Clone atau Download Proyek
-```bash
-git clone https://github.com/username/bot-trading-saham.git
-cd bot-trading-saham
-2. Buat Virtual Environment (disarankan)
-bash
+---
+
+## 🏗️ Arsitektur Sistem
+
+![Architecture Diagram](assets/architecture.png)  
+*Gambaran alur data dari pengambilan hingga output ke pengguna*
+
+**Penjelasan alur**:
+1. **Data Fetcher** mengambil data historis dari Yahoo Finance dan menyimpannya di SQLite.
+2. **Feature Engineering** menghasilkan indikator teknikal (RSI, MACD, EMA, ATR, ADX, Ichimoku, Fibonacci, dll.).
+3. **Multi-Agent System** terdiri dari 8 agen yang masing-masing memberikan probabilitas naik/turun.
+4. **RL Orchestrator** menggabungkan sinyal dengan bobot adaptif (Q‑learning).
+5. **Training Queue** mengelola pelatihan model di latar belakang saat diperlukan.
+6. **Telegram Bot** dan **Dashboard** menyajikan hasil analisis kepada pengguna.
+
+---
+
+## 🛠️ Teknologi yang Digunakan
+
+- **Python 3.11** – Bahasa pemrograman utama.
+- **Pandas, NumPy** – Manipulasi data numerik.
+- **yfinance** – Pengambilan data saham dari Yahoo Finance.
+- **XGBoost, LightGBM** – Model gradient boosting.
+- **PyTorch** – Implementasi LSTM dan IndoBERT.
+- **scikit-learn** – Preprocessing dan evaluasi model.
+- **Transformers (HuggingFace)** – Model IndoBERT untuk sentimen.
+- **TA (Technical Analysis Library)** – Indikator teknikal.
+- **Streamlit** – Dashboard interaktif.
+- **python-telegram-bot** – Integrasi dengan Telegram.
+- **BeautifulSoup, requests** – Web scraping berita lokal.
+- **SQLite** – Database lokal.
+- **APScheduler** – Penjadwalan tugas otomatis.
+- **dotenv** – Manajemen konfigurasi rahasia.
+
+---
+
+## 🚀 Instalasi
+
+### Prasyarat
+- Python 3.11 atau lebih baru
+- Git
+- Token Bot Telegram (dari [@BotFather](https://t.me/botfather))
+- (Opsional) API key NewsAPI untuk berita global
+
+### Langkah-langkah
+
+1. **Clone repositori**
+   ```bash
+   git clone https://github.com/MxCelll/indonesia-stock-trading-bot.git
+   cd indonesia-stock-trading-bot
+
+2. Buat virtual environment (disarankan)
 python -m venv venv
-venv\Scripts\activate   # Windows
-3. Install Dependencies
-bash
-pip install -r requirements.txt
-4. Siapkan File .env
-Buat file .env di folder utama dengan isi:
+# Windows
+venv\Scripts\activate
+# Linux/Mac
+source venv/bin/activate
 
-text
+3. Install dependencies
+pip install -r requirements.txt
+
+4. Buat file .env berisi kredensial:
+env
 TELEGRAM_TOKEN=your_telegram_bot_token
 TELEGRAM_CHAT_ID=your_telegram_chat_id
-GEMINI_API_KEY=your_gemini_api_key
-NEWS_API_KEY=your_newsapi_key
-⚙️ Konfigurasi
-Membuat Bot Telegram
-Buka Telegram, cari @BotFather.
+NEWS_API_KEY=your_newsapi_key      # opsional
+FRED_API_KEY=your_fred_api_key     # opsional
 
-Kirim /newbot, ikuti instruksi, dapatkan token.
+5. Inisialisasi database
+python import_symbols.py            # mengimpor 950+ simbol saham
+python scripts/optimize_db.py       # menambahkan indeks
 
-Cari @userinfobot untuk mendapatkan chat ID Anda.
-
-Mendapatkan API Key Gemini
-Kunjungi Google AI Studio.
-
-Login dengan akun Google, buat API key.
-
-Mendapatkan API Key NewsAPI (Opsional)
-Daftar di newsapi.org.
-
-Dapatkan API key gratis.
-
-🚀 Cara Menjalankan
-Mode Manual (dengan data diimpor manual)
-Download data saham dari Investing.com dalam format CSV.
-
-Letakkan file CSV di folder data_csv/.
-
-Jalankan impor:
-
-bash
-python scripts/import_manual.py
-Jalankan bot:
-
-bash
+6. Jalankan bot
 python main.py
-Menambahkan Indeks Database (Optimasi)
-Jalankan sekali untuk menambahkan indeks:
 
-bash
-python scripts/add_indexes.py
-🤖 Perintah Telegram
-Perintah	Deskripsi	Contoh
-/start	Menyapa bot	/start
-/help	Menampilkan bantuan	/help
-/status	Informasi bot & database	/status
-/tanya <kode> <pertanyaan>	Analisis mendalam + sentimen berita	/tanya BBCA kenapa turun?
-/jelas <kode>	Analisis cepat (harga, RSI, support/resistance)	/jelas BBCA
-/banding <kode1> <kode2>	Bandingkan dua saham	/banding BBCA BBRI
-/top	Gainers & losers (1H, 1M, 1B)	/top
-/screener [filter]	Filter saham (preset atau kustom)	/screener oversold, /screener rsi<30 volume>2x
-/watchlist	Tampilkan watchlist	/watchlist
-/watchlist_add <kode> [target] [stop]	Tambah ke watchlist	/watchlist_add BBCA 7500 7000
-/watchlist_remove <kode>	Hapus dari watchlist	/watchlist_remove BBCA
-/watchlist_target <kode> <target>	Update target	/watchlist_target BBCA 7600
-/watchlist_stop <kode> <stop>	Update stop	/watchlist_stop BBCA 6900
-/tf <kode>	Multi-timeframe analysis	/tf BBCA
-/backtest <kode>	Simulasi backtesting	/backtest BBCA
-/evaluasi	Laporan mingguan	/evaluasi
-📁 Struktur Proyek
-text
-BotTradingSaham/
-├── main.py                  # Entry point scheduler
-├── .env                     # Environment variables
-├── requirements.txt         # Dependencies
-├── data/                    # Database & cache
-├── data_csv/                # Folder untuk file CSV impor
-├── scripts/                 # Modul Python
-│   ├── add_indexes.py
-│   ├── ai_validator_v2.py
-│   ├── analisis_adaptif.py
-│   ├── analisis_bulk.py
-│   ├── backtest.py
-│   ├── bot_utils.py
-│   ├── cache_manager.py
-│   ├── circuit_breaker.py
-│   ├── cooldown_manager.py
-│   ├── data_fetcher.py
-│   ├── formatters.py
-│   ├── import_manual.py
-│   ├── journal.py
-│   ├── market_calendar.py
-│   ├── market_regime.py
-│   ├── multi_tf.py
-│   ├── notifier.py
-│   ├── notifier_engine.py
-│   ├── risk_manager.py
-│   ├── screener.py
-│   ├── sentiment.py
-│   ├── strategies.py
-│   ├── strategy_selector.py
-│   ├── telegram_bot.py
-│   ├── top_stocks.py
-│   ├── trade_executor.py
-│   ├── watchlist.py
-│   └── weekly_report.py
-└── scripts/__init__.py
-⚙️ Kustomisasi
-Mengubah Parameter Strategi
-Edit file scripts/strategy_selector.py atau scripts/strategies.py untuk menyesuaikan threshold RSI, ADX, dll.
+7. (Opsional) Jalankan dashboard
+streamlit run dashboard.py
+Akses dashboard di http://localhost:8501.
 
-Menambah Saham Baru
-Cukup download CSV dari Investing.com, letakkan di data_csv/, lalu jalankan python scripts/import_manual.py.
+📱 Perintah Telegram
+Berikut adalah beberapa perintah utama yang tersedia. Untuk daftar lengkap, kirim /help ke bot Anda.
 
-Mengubah Waktu Notifikasi
-Edit main.py pada bagian scheduler.
+Perintah	Deskripsi
+/start	Menyapa dan menampilkan informasi dasar.
+/help	Menampilkan daftar semua perintah.
+/jelas <kode>	Analisis cepat (harga, RSI, EMA, support/resistance).
+/agent <kode>	Analisis multi-agent lengkap dengan auto‑training.
+/top	Menampilkan saham dengan gain/loss terbesar hari ini.
+/screener [filter]	Mencari saham berdasarkan kondisi teknikal (oversold, volume spike, golden cross, dll).
+/tf <kode>	Analisis multi‑timeframe (daily, weekly, monthly).
+/backtest <kode>	Menjalankan backtesting sederhana.
+/journal	Ringkasan jurnal trading.
+/train_status	Status antrean training model.
+/errors	Menampilkan error terbaru dari log.
+/update_fundamental	Memperbarui data fundamental semua saham.
 
-🐛 Pemecahan Masalah
-Error ModuleNotFoundError
-Pastikan virtual environment aktif dan semua dependencies terinstall.
+📊 Contoh Output
+Perintah /agent BBCA:
 
-Error ImportError (circular import)
-Periksa apakah ada modul yang saling mengimpor. Gunakan scripts/formatters.py untuk fungsi format.
+🤖 *Multi-Agent Analysis BBCA.JK*
+Regime: trending_bull
 
-Bot Tidak Merespons Telegram
-Periksa token di .env dan pastikan bot sudah di-start.
+• Announcement: BUY (conf 40.0%, reason: PER moderat (15.4x) [+10]; PBV tinggi)
+• Event: SELL (conf 0.0%, reason: News: -0.07, Cluster: 0.00)
+• Momentum: BUY (conf 92.3%, reason: Ensemble: NAIK (92.3%))
+• Market: BUY (conf 60.0%, reason: Economic risk: LOW)
+• BestStrategy: BUY (conf 70.0%, reason: Entry signal from best strategy)
+• Macro: BUY (conf 30.0%, reason: Macro: Sektor terkuat terdeteksi (+5))
+• StrategyAdapter: SELL (conf 0.0%, reason: Volatilitas tinggi, gunakan Goren)
+• Geopolitical: BUY (conf 46.0%, reason: SEDANG (skor 0.46))
 
-Data Saham Tidak Muncul
-Pastikan file CSV di data_csv/ dengan format yang benar (kolom Date, Price, Open, High, Low, Vol., Change %). Jalankan impor ulang.
+*Konsensus:* NETRAL (conf 50.0%)
+Dashboard Interaktif (Streamlit):
+https://assets/dashboard.png
 
-Error KeyError: 'EMA20'
-Pastikan data memiliki cukup baris (minimal 20) untuk menghitung EMA. Periksa scripts/multi_tf.py dan scripts/analisis_adaptif.py.
+🗂️ Struktur Proyek
+.
+├── main.py                     # Entry point bot (scheduler)
+├── dashboard.py                # Streamlit dashboard
+├── requirements.txt            # Dependencies
+├── .gitignore                  # File yang diabaikan Git
+├── .env                        # Konfigurasi rahasia (tidak di-commit)
+├── scripts/                    # Semua modul Python
+│   ├── data_utils.py           # Fungsi database dan indikator
+│   ├── historical_yahoo.py     # Pengambilan data Yahoo Finance
+│   ├── sentiment_news.py       # Scraping berita & sentimen
+│   ├── lstm_predictor.py       # Model LSTM
+│   ├── ensemble_predictor.py   # Ensemble XGBoost + LightGBM
+│   ├── training_queue.py       # Antrean training background
+│   ├── agent_analyst_framework.py  # Definisi 8 agen
+│   ├── multi_agent_selector.py # RL orchestrator
+│   ├── risk_manager.py         # Manajemen risiko
+│   └── ... (modul lainnya)
+├── services/                   # Layanan eksternal (Stockbit, dll)
+├── utils/                      # Fungsi pembantu
+├── data/                       # Database, cache, model (diabaikan Git)
+│   ├── saham.db                # Database SQLite
+│   ├── cache/                  # Cache sentimen
+│   └── lstm_models/            # Model LSTM yang sudah dilatih
+└── assets/                     # Gambar untuk README
 
-📜 Lisensi & Disclaimer
-text
-DISCLAIMER:
-Bot ini dibuat untuk tujuan edukasi dan tidak bertanggung jawab atas kerugian finansial.
-Trading saham berisiko tinggi. Konsultasikan dengan penasihat keuangan sebelum mengambil keputusan.
-Penulis tidak berafiliasi dengan broker atau sekuritas manapun.
+📝 Lisensi
+Proyek ini dilisensikan di bawah MIT License – lihat file LICENSE untuk detail.
+
+⚠️ Disclaimer
+Bot ini dibuat untuk tujuan edukasi dan riset.
+Trading saham mengandung risiko tinggi. Penulis tidak bertanggung jawab atas kerugian finansial yang mungkin timbul akibat penggunaan bot ini. Selalu konsultasikan dengan penasihat keuangan sebelum mengambil keputusan investasi.
+
+👤 Penulis
+- MxCelll
+- GitHub: @MxCelll
+- LinkedIn: https://www.linkedin.com/in/muhammad-excel-trisnaro-55895737a?utm_source=share_via&utm_content=profile&utm_medium=member_ios
+
+🙏 Acknowledgements
+- Terima kasih kepada komunitas open source atas library‑library luar biasa seperti yfinance, ta, transformers, xgboost, lightgbm, torch, dan python-telegram-bot.
+- Terinspirasi dari proyek Saftrade dan Freqtrade.
+
+⭐ Jika proyek ini bermanfaat, beri bintang di GitHub!
